@@ -1,0 +1,29 @@
+/* Primer Primitives - Size & Typography */
+@import '@primer/primitives/dist/css/base/size/size.css';
+@import '@primer/primitives/dist/css/base/typography/typography.css';
+@import '@primer/primitives/dist/css/functional/size/border.css';
+@import '@primer/primitives/dist/css/functional/size/size.css';
+@import '@primer/primitives/dist/css/functional/typography/typography.css';
+
+/* Primer Primitives - Color Theme (light only) */
+@import '@primer/primitives/dist/css/functional/themes/light.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bgColor-default);
+  color: var(--fgColor-default);
+}
+
+a {
+  color: var(--fgColor-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

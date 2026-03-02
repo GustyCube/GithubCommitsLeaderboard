@@ -1,0 +1,45 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "github-commits-leaderboard",
+	"main": "worker.ts",
+	"compatibility_date": "2026-03-02",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"vars": {
+		"APP_URL": "http://ghcommits.com",
+		"NEXT_PUBLIC_REPOSITORY_URL": "https://github.com/GustyCube/GithubCommitsLeaderboard"
+	},
+	// Hyperdrive for Neon PostgreSQL connection pooling
+	// 1. Create config: npx wrangler hyperdrive create neon-leaderboard --connection-string="postgres://USER:PASS@HOST/DB"
+	// 2. Copy the returned ID below
+	// 3. For local dev with wrangler: create .dev.vars with DATABASE_URL=your_connection_string
+	//    OR use npm run dev with .env.local (bypasses wrangler, uses Next.js directly)
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "aee89c7b5b11441c9ea84decaaab2a08"
+		}
+	],
+	// Add a KV namespace for shared rate limiting in production:
+	// "kv_namespaces": [
+	//   {
+	//     "binding": "RATE_LIMITS",
+	//     "id": "replace-me",
+	//     "preview_id": "replace-me"
+	//   }
+	// ],
+	"triggers": {
+		"crons": [
+			"0 0 */3 * *"
+		]
+	}
+}
