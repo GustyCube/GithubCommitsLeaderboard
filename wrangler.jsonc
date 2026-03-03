@@ -21,8 +21,13 @@
 	// Hyperdrive for Neon PostgreSQL connection pooling
 	// 1. Create config: npx wrangler hyperdrive create neon-leaderboard --connection-string="postgres://USER:PASS@HOST/DB"
 	// 2. Copy the returned ID below
-	// 3. For local dev with wrangler: create .dev.vars with DATABASE_URL=your_connection_string
-	//    OR use npm run dev with .env.local (bypasses wrangler, uses Next.js directly)
+	// 3. For local dev with wrangler, set DATABASE_URL in .dev.vars or
+	//    CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE in your shell.
+	// 4. For Cloudflare Workers Builds / CI deploys, also set
+	//    CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE as a secret or env var.
+	//    OpenNext deploy bootstraps Wrangler's local platform proxy before the real remote deploy,
+	//    and Wrangler requires a direct Postgres URL for Hyperdrive during that step.
+	// 5. npm run dev with .env.local bypasses wrangler and uses Next.js directly.
 	"hyperdrive": [
 		{
 			"binding": "HYPERDRIVE",

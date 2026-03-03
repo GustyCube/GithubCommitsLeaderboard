@@ -91,6 +91,8 @@ DATABASE_URL=postgresql://user:password@host/database
 
 The application automatically uses `DATABASE_URL` when the Hyperdrive binding is not available.
 
+If you use Hyperdrive with Wrangler-based commands, Wrangler also accepts a binding-specific local fallback connection string via `CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE`.
+
 ### GitHub OAuth App Setup
 
 1. Go to GitHub Settings > Developer settings > OAuth Apps
@@ -120,7 +122,17 @@ npx wrangler secret put SESSION_SECRET
 npx wrangler secret put CRON_SECRET
 ```
 
-**Step 4:** Deploy:
+**Step 4:** Set a direct Postgres connection string for Wrangler's Hyperdrive bootstrap in local/CI environments.
+
+For local `wrangler dev`, add this to `.dev.vars` or your shell:
+
+```env
+CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=postgresql://user:password@host/database
+```
+
+For Cloudflare Workers Builds / CI deploys, add the same variable as an environment variable or secret in the Cloudflare dashboard. OpenNext's deploy flow calls Wrangler's platform proxy before the real remote deploy, and Wrangler requires this local Hyperdrive fallback even when the target deployment is production.
+
+**Step 5:** Deploy:
 
 ```bash
 npm run deploy
