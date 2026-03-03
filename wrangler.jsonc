@@ -15,7 +15,7 @@
 		"enabled": true
 	},
 	"vars": {
-		"APP_URL": "http://ghcommits.com",
+		"APP_URL": "https://ghcommits.com",
 		"NEXT_PUBLIC_REPOSITORY_URL": "https://github.com/GustyCube/GithubCommitsLeaderboard"
 	},
 	// Hyperdrive for Neon PostgreSQL connection pooling
