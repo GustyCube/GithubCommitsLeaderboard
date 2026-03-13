@@ -357,6 +357,58 @@ export async function getRankAtCommits(commits: number, githubId: number): Promi
   });
 }
 
+export async function listTimeBased(days: number, limit = 50): Promise<{
+  days: number;
+  generatedAt: string;
+  data: (LeaderboardEntry & { commitsDelta: number })[];
+}> {
+  const safeLimit = Math.min(Math.max(limit, 1), 50);
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+
+  return withDb(async (client) => {
+    // For each user, get their earliest score_history entry in the window
+    // and compute delta = current commits - earliest snapshot
+    const result = await client.query<LeaderboardRow & { commits_delta: number }>(
+      `
+        SELECT
+          u.github_id,
+          u.login,
+          u.name,
+          u.avatar_url,
+          u.profile_url,
+          u.github_created_at,
+          s.all_time_commits,
+          s.last_updated_at,
+          (s.all_time_commits - earliest.all_time_commits) AS commits_delta
+        FROM users u
+        JOIN scores s ON s.user_id = u.id
+        JOIN LATERAL (
+          SELECT sh.all_time_commits
+          FROM score_history sh
+          WHERE sh.user_id = u.id
+            AND sh.recorded_at >= $1
+          ORDER BY sh.recorded_at ASC
+          LIMIT 1
+        ) earliest ON TRUE
+        WHERE u.needs_reconnect = FALSE
+          AND (s.all_time_commits - earliest.all_time_commits) > 0
+        ORDER BY (s.all_time_commits - earliest.all_time_commits) DESC, u.github_id ASC
+        LIMIT $2
+      `,
+      [since, safeLimit],
+    );
+
+    return {
+      days,
+      generatedAt: new Date().toISOString(),
+      data: result.rows.map((row, index) => ({
+        ...mapLeaderboardRow(row, index + 1),
+        commitsDelta: row.commits_delta,
+      })),
+    };
+  });
+}
+
 export async function findUserByRank(rank: number): Promise<RankLookupResponse> {
   return withDb(async (client) => {
     const version = await getLeaderboardVersion(client);
