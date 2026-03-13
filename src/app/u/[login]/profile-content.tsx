@@ -118,8 +118,13 @@ function CommitHistory({ login, currentCommits }: { login: string; currentCommit
       }}
     >
       <Stack direction="vertical" gap="normal">
-        <Stack direction="horizontal" gap="condensed" align="center" justify="space-between">
+        <Stack direction="vertical" gap="condensed">
           <Text size="small" weight="semibold">Commit Growth</Text>
+          <Text size="small" style={{ color: "var(--fgColor-muted)" }}>
+            Data points are recorded every 3 days.
+          </Text>
+        </Stack>
+        <Stack direction="horizontal" gap="condensed" align="center" justify="space-between">
           <Stack direction="horizontal" gap="none">
             {PERIODS.map((p) => (
               <button

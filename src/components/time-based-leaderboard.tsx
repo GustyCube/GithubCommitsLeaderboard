@@ -90,6 +90,9 @@ export function TimeBasedLeaderboard() {
 
   return (
     <Stack direction="vertical" gap="condensed">
+      <Text size="small" style={{ color: "var(--fgColor-muted)" }}>
+        Rankings based on commits gained in the selected period. Data points are recorded every 3 days.
+      </Text>
       <Stack direction="horizontal" gap="none">
         {PERIODS.map((p) => (
           <button
