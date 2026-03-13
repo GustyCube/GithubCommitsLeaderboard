@@ -50,6 +50,18 @@ const endpoints = [
     ],
     response: ["SVG image (Content-Type: image/svg+xml)"],
   },
+  {
+    method: "GET",
+    path: "/api/user/{login}/history",
+    query: "?days=30",
+    description: "Returns the commit count history for a user over a given time window. Useful for tracking growth and rank movement over time.",
+    rateLimit: "20/min/IP, 200/day/IP",
+    params: [
+      { name: "login", type: "string", description: "GitHub username, case-insensitive" },
+      { name: "days", type: "integer", description: "Number of days to look back (1–365, default 30)" },
+    ],
+    response: ["login", "days", "history[].allTimeCommits", "history[].recordedAt"],
+  },
 ];
 
 function EndpointCard({ endpoint }: { endpoint: typeof endpoints[0] }) {
