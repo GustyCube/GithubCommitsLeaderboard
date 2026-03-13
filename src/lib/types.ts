@@ -30,6 +30,7 @@ export type UserLookupResponse = {
   found: boolean;
   source: "database";
   data: LeaderboardEntry | null;
+  totalUsers?: number;
 };
 
 export type RankLookupResponse = {

@@ -29,6 +29,10 @@ const POLICIES: Record<string, RateLimitPolicy> = {
     perMinute: 5,
     perDay: 100,
   },
+  onboarding: {
+    perMinute: 5,
+    perDay: 20,
+  },
 };
 
 async function incrementMemoryCounter(key: string, ttlSeconds: number) {

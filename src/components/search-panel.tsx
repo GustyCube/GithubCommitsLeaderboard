@@ -105,6 +105,11 @@ export function SearchPanel() {
                 <Text size="small" weight="medium">
                   Rank #{result.data.rank}
                 </Text>
+                {result.totalUsers != null && (
+                  <Text size="small" weight="light" style={{ color: "var(--fgColor-muted)" }}>
+                    Top {Math.max(1, Math.ceil((1 - (result.data.rank - 1) / result.totalUsers) * 100))}% by GitHub commits
+                  </Text>
+                )}
                 <Heading as="h3">
                   {result.data.name ?? result.data.login}
                 </Heading>

@@ -20,12 +20,12 @@ const endpoints = [
     method: "GET",
     path: "/api/user/{login}",
     query: "",
-    description: "Looks up a connected GitHub login, returning rank and public profile fields when found.",
+    description: "Looks up a connected GitHub login, returning rank, percentile data, and public profile fields when found.",
     rateLimit: "20/min/IP, 200/day/IP",
     params: [
       { name: "login", type: "string", description: "GitHub username, case-insensitive, leading @ ignored" },
     ],
-    response: ["version", "generatedAt", "found", "data"],
+    response: ["version", "generatedAt", "found", "totalUsers", "data"],
   },
   {
     method: "GET",

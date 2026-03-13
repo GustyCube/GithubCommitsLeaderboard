@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { findUserByLogin } from "@/lib/db";
+import { findUserByLoginWithCount } from "@/lib/db";
 import {
   createJsonResponse,
   createRateLimitedResponse,
@@ -29,7 +29,7 @@ export async function GET(
 
     const { login } = await context.params;
     const normalized = loginSchema.parse(login);
-    const data = await findUserByLogin(normalized);
+    const data = await findUserByLoginWithCount(normalized);
 
     return withPublicApiCache(createJsonResponse(data));
   } catch (error) {

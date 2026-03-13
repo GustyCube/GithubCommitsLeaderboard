@@ -13,13 +13,14 @@ function estimateTextWidth(text: string, fontSize: number, fontWeight: number): 
 /**
  * Renders an SVG badge showing a user's GitHub commits leaderboard rank.
  *
- * @param rank  - The user's rank (1-based)
- * @param theme - "light" (default) or "dark"
+ * @param rank       - The user's rank (1-based)
+ * @param percentile - The user's percentile (e.g. 5 means top 5%)
+ * @param theme      - "light" (default) or "dark"
  * @returns SVG string
  */
-export function renderRankedBadge(rank: number, theme: "light" | "dark" = "light"): string {
+export function renderRankedBadge(rank: number, percentile: number, theme: "light" | "dark" = "light"): string {
   const rankText = `#${rank}`;
-  const labelText = `by GitHub commits · ghcommits.com`;
+  const labelText = `Top ${percentile}% by GitHub commits · ghcommits.com`;
 
   const height = 28;
   const radius = 6;

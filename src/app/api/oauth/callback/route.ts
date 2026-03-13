@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-import { refreshSingleUser, upsertConnectedUser } from "@/lib/db";
+import { upsertConnectedUser } from "@/lib/db";
 import { exchangeCodeForAccessToken, getViewerIdentity } from "@/lib/github";
 import { createSessionCookieValue, SESSION_COOKIE } from "@/lib/session";
 import { requireEnv } from "@/lib/runtime-env";
@@ -27,11 +27,9 @@ export async function GET(request: NextRequest) {
     const accessToken = await exchangeCodeForAccessToken(code, redirectUri);
     const identity = await getViewerIdentity(accessToken);
     const sessionUser = await upsertConnectedUser(identity, accessToken);
-    await refreshSingleUser(sessionUser.userId);
 
     const sessionCookie = await createSessionCookieValue(sessionUser);
-    const successRedirect = new URL("/", env.APP_URL);
-    successRedirect.searchParams.set("connected", "1");
+    const successRedirect = new URL("/onboarding", env.APP_URL);
 
     const response = NextResponse.redirect(successRedirect);
     response.cookies.set(SESSION_COOKIE, sessionCookie.value, {

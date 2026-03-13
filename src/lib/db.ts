@@ -238,6 +238,77 @@ export async function findUserByLogin(login: string): Promise<UserLookupResponse
   });
 }
 
+export async function findUserByLoginWithCount(login: string): Promise<UserLookupResponse & { totalUsers: number }> {
+  const normalized = normalizeLogin(login);
+
+  return withDb(async (client) => {
+    const version = await getLeaderboardVersion(client);
+
+    const countResult = await client.query<{ count: string }>(
+      `SELECT COUNT(*)::text AS count FROM users WHERE needs_reconnect = FALSE`,
+    );
+    const totalUsers = Number(countResult.rows[0]?.count ?? "0");
+
+    const userResult = await client.query<LeaderboardRow>(
+      `
+        SELECT
+          u.github_id,
+          u.login,
+          u.name,
+          u.avatar_url,
+          u.profile_url,
+          u.github_created_at,
+          s.all_time_commits,
+          s.last_updated_at
+        FROM users u
+        JOIN scores s ON s.user_id = u.id
+        WHERE u.login_lc = $1
+          AND u.needs_reconnect = FALSE
+        LIMIT 1
+      `,
+      [normalized],
+    );
+
+    const row = userResult.rows[0];
+
+    if (!row) {
+      return {
+        version,
+        generatedAt: new Date().toISOString(),
+        found: false,
+        source: "database",
+        data: null,
+        totalUsers,
+      } satisfies UserLookupResponse & { totalUsers: number };
+    }
+
+    const rankResult = await client.query<{ count: string }>(
+      `
+        SELECT COUNT(*)::text AS count
+        FROM users u
+        JOIN scores s ON s.user_id = u.id
+        WHERE u.needs_reconnect = FALSE
+          AND (
+            s.all_time_commits > $1
+            OR (s.all_time_commits = $1 AND u.github_id < $2)
+          )
+      `,
+      [row.all_time_commits, row.github_id],
+    );
+
+    const rank = Number(rankResult.rows[0]?.count ?? "0") + 1;
+
+    return {
+      version,
+      generatedAt: new Date().toISOString(),
+      found: true,
+      source: "database",
+      data: mapLeaderboardRow(row, rank),
+      totalUsers,
+    } satisfies UserLookupResponse & { totalUsers: number };
+  });
+}
+
 export async function findUserByRank(rank: number): Promise<RankLookupResponse> {
   return withDb(async (client) => {
     const version = await getLeaderboardVersion(client);
