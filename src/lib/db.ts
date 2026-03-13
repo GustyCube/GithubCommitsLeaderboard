@@ -309,6 +309,54 @@ export async function findUserByLoginWithCount(login: string): Promise<UserLooku
   });
 }
 
+export async function getScoreHistory(
+  login: string,
+  since: Date,
+): Promise<{ allTimeCommits: number; recordedAt: string }[]> {
+  const normalized = normalizeLogin(login);
+
+  return withDb(async (client) => {
+    const result = await client.query<{
+      all_time_commits: number;
+      recorded_at: Date;
+    }>(
+      `
+        SELECT sh.all_time_commits, sh.recorded_at
+        FROM score_history sh
+        JOIN users u ON u.id = sh.user_id
+        WHERE u.login_lc = $1
+          AND sh.recorded_at >= $2
+        ORDER BY sh.recorded_at ASC
+      `,
+      [normalized, since],
+    );
+
+    return result.rows.map((row) => ({
+      allTimeCommits: row.all_time_commits,
+      recordedAt: row.recorded_at.toISOString(),
+    }));
+  });
+}
+
+export async function getRankAtCommits(commits: number, githubId: number): Promise<number> {
+  return withDb(async (client) => {
+    const result = await client.query<{ count: string }>(
+      `
+        SELECT COUNT(*)::text AS count
+        FROM users u
+        JOIN scores s ON s.user_id = u.id
+        WHERE u.needs_reconnect = FALSE
+          AND (
+            s.all_time_commits > $1
+            OR (s.all_time_commits = $1 AND u.github_id < $2)
+          )
+      `,
+      [commits, githubId],
+    );
+    return Number(result.rows[0]?.count ?? "0") + 1;
+  });
+}
+
 export async function findUserByRank(rank: number): Promise<RankLookupResponse> {
   return withDb(async (client) => {
     const version = await getLeaderboardVersion(client);
@@ -548,6 +596,14 @@ async function updateUserScore(
         last_checked_at = $3,
         last_updated_at = $3
       WHERE user_id = $1
+    `,
+    [userId, allTimeCommits, checkedAt],
+  );
+
+  await client.query(
+    `
+      INSERT INTO score_history (user_id, all_time_commits, recorded_at)
+      VALUES ($1, $2, $3)
     `,
     [userId, allTimeCommits, checkedAt],
   );
