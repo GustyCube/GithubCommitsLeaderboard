@@ -62,6 +62,18 @@ const endpoints = [
     ],
     response: ["login", "days", "history[].allTimeCommits", "history[].recordedAt"],
   },
+  {
+    method: "GET",
+    path: "/api/leaderboard/time-based",
+    query: "?days=90&limit=50",
+    description: "Returns a leaderboard ranked by commits gained within a time window, using score history snapshots.",
+    rateLimit: "60/min/IP, 1000/day/IP",
+    params: [
+      { name: "days", type: "integer", description: "Number of days to look back (1–365, default 90)" },
+      { name: "limit", type: "integer", description: "Number of rows, capped at 50" },
+    ],
+    response: ["days", "generatedAt", "data[].commitsDelta", "data[].rank", "data[].login", "data[].allTimeCommits"],
+  },
 ];
 
 function EndpointCard({ endpoint }: { endpoint: typeof endpoints[0] }) {
