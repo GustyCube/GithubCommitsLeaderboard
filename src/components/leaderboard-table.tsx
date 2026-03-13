@@ -59,13 +59,15 @@ export function LeaderboardTable({
       field: "login",
       rowHeader: true,
       renderCell: (row) => (
-        <Stack direction="horizontal" gap="condensed" align="center">
-          <Avatar src={row.avatarUrl} alt={`${row.login} avatar`} size={32} />
-          <Stack direction="vertical" gap="none">
-            <Text weight="semibold">{row.name ?? row.login}</Text>
-            <Text size="small" weight="light">@{row.login}</Text>
+        <PrimerLink href={`/u/${row.login}`} style={{ textDecoration: "none", color: "inherit" }}>
+          <Stack direction="horizontal" gap="condensed" align="center">
+            <Avatar src={row.avatarUrl} alt={`${row.login} avatar`} size={32} />
+            <Stack direction="vertical" gap="none">
+              <Text weight="semibold">{row.name ?? row.login}</Text>
+              <Text size="small" weight="light">@{row.login}</Text>
+            </Stack>
           </Stack>
-        </Stack>
+        </PrimerLink>
       ),
     },
     {
