@@ -192,6 +192,11 @@ export default function ApiDocsPage() {
             <li>Public GET routes return cache headers suitable for Cloudflare edge caching.</li>
             <li>OAuth and session routes are never cached.</li>
             <li>
+              Profile pages are available at{" "}
+              <code style={{ color: "var(--fgColor-accent)" }}>/u/{"{login}"}</code>{" "}
+              for any connected user.
+            </li>
+            <li>
               Source code is available from the repository link on the{" "}
               <PrimerLink href="/">homepage</PrimerLink>.
             </li>
