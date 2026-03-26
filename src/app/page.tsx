@@ -20,7 +20,7 @@ function getStatusMessage(errorCode: string | null, connected: string | null) {
       variant: "success" as const,
       title: "GitHub account connected",
       body: "Your profile was stored and a leaderboard refresh was started for this account.",
-      icon: <CheckCircleFillIcon size={16} />,
+      icon: <CheckCircleFillIcon size={16} />, 
     };
   }
 
@@ -29,7 +29,7 @@ function getStatusMessage(errorCode: string | null, connected: string | null) {
       variant: "danger" as const,
       title: "OAuth validation failed",
       body: "The GitHub callback state was invalid or expired. Start the connect flow again.",
-      icon: <AlertIcon size={16} />,
+      icon: <AlertIcon size={16} />, 
     };
   }
 
@@ -38,7 +38,7 @@ function getStatusMessage(errorCode: string | null, connected: string | null) {
       variant: "danger" as const,
       title: "GitHub login failed",
       body: "The OAuth callback completed but user setup or score refresh failed.",
-      icon: <AlertIcon size={16} />,
+      icon: <AlertIcon size={16} />, 
     };
   }
 
@@ -95,6 +95,9 @@ function HomeContent() {
           <Text size="medium" style={{ textAlign: "center", maxWidth: "600px" }}>
             A public leaderboard tracking all-time commit contributions across GitHub.
             Connect your account to see where you rank among developers worldwide.
+          </Text>
+          <Text size="medium" style={{ textAlign: "center" }}>
+            Made by <a href="https://github.com/gustycube" target="_blank" rel="noopener noreferrer" style={{ color: "var(--fgColor-accent)", textDecoration: "none" }}>GustyCube</a>
           </Text>
           <Stack direction="horizontal" gap="normal" wrap="wrap" justify="center">
             <Button as="a" href="/connect" variant="primary">
