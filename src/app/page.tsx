@@ -97,7 +97,7 @@ function HomeContent() {
             Connect your account to see where you rank among developers worldwide.
           </Text>
           <Text size="medium" style={{ textAlign: "center" }}>
-            Made by <a href="https://github.com/gustycube" target="_blank" rel="noopener noreferrer" style={{ color: "var(--fgColor-accent)", textDecoration: "none" }}>GustyCube</a>
+            Made by <a href="https://github.com/BennettSchwartz" target="_blank" rel="noopener noreferrer" style={{ color: "var(--fgColor-accent)", textDecoration: "none" }}>Bennett Schwartz</a>
           </Text>
           <Stack direction="horizontal" gap="normal" wrap="wrap" justify="center">
             <Button as="a" href="/connect" variant="primary">
