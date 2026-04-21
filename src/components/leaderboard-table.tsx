@@ -63,7 +63,12 @@ export function LeaderboardTable({
           <Stack direction="horizontal" gap="condensed" align="center">
             <Avatar src={row.avatarUrl} alt={`${row.login} avatar`} size={32} />
             <Stack direction="vertical" gap="none">
-              <Text weight="semibold">{row.name ?? row.login}</Text>
+              <Stack direction="horizontal" gap="condensed" align="center">
+                <Text weight="semibold">{row.name ?? row.login}</Text>
+                {row.login.toLowerCase() === "bennettschwartz" && (
+                  <span title="Creator of this leaderboard" aria-label="Creator">🛠️</span>
+                )}
+              </Stack>
               <Text size="small" weight="light">@{row.login}</Text>
             </Stack>
           </Stack>
