@@ -16,7 +16,7 @@
 	},
 	"vars": {
 		"APP_URL": "https://ghcommits.com",
-		"NEXT_PUBLIC_REPOSITORY_URL": "https://github.com/GustyCube/GithubCommitsLeaderboard"
+		"NEXT_PUBLIC_REPOSITORY_URL": "https://github.com/BennettSchwartz/GithubCommitsLeaderboard"
 	},
 	// Hyperdrive for Neon PostgreSQL connection pooling
 	// 1. Create config: npx wrangler hyperdrive create neon-leaderboard --connection-string="postgres://USER:PASS@HOST/DB"

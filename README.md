@@ -47,7 +47,7 @@ Your commit count is refreshed automatically every 3 days.
 
 Once you're on the leaderboard, you can generate an embeddable badge showing your rank:
 
-[![GitHub Commits Badge](https://ghcommits.com/api/badge/GustyCube.svg)](https://ghcommits.com)
+[![GitHub Commits Badge](https://ghcommits.com/api/badge/BennettSchwartz.svg)](https://ghcommits.com)
 
 ```markdown
 [![GitHub Commits Badge](https://ghcommits.com/api/badge/YOUR_USERNAME.svg)](https://ghcommits.com)
